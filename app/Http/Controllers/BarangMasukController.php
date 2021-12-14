@@ -14,7 +14,9 @@ class BarangMasukController extends Controller
      */
     public function index()
     {
-        return view("pages.barangmasuk.list");
+        return view("pages.barangmasuk.list",[
+            "barangmasuk" => BarangMasuk::all()
+        ]);
     }
 
     /**
@@ -35,7 +37,19 @@ class BarangMasukController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "tanggal" => "required",
+            "produk_id" => "required",
+        ]);
+
+        BarangMasuk::create([
+            "tanggal" => $request->tanggal,
+            "produk_id" => $request->produk_id,
+        ]);
+
+        return redirect()
+            ->route("barangmasuk.index")
+            ->with("info","Berhasil Tambah Kelompok");
     }
 
     /**
@@ -57,7 +71,9 @@ class BarangMasukController extends Controller
      */
     public function edit(BarangMasuk $barangMasuk)
     {
-        //
+        return view('pages.barangmasuk.form',[
+            "barangmasuk" => $barangMasuk
+        ]);
     }
 
     /**
@@ -69,7 +85,15 @@ class BarangMasukController extends Controller
      */
     public function update(Request $request, BarangMasuk $barangMasuk)
     {
-        //
+        $barangMasuk->update([
+            "tanggal" => $request->tanggal,
+            "produk_id" => $request->produk_id
+
+        ]);
+
+        return redirect()
+                ->route("barangmasuk.index")
+                ->with("info","Berhasil Update Kelompok");
     }
 
     /**
@@ -80,6 +104,10 @@ class BarangMasukController extends Controller
      */
     public function destroy(BarangMasuk $barangMasuk)
     {
-        //
+        $barangMasuk->delete();
+
+        return redirect()
+            ->route("barangmasuk.index")
+            ->with("info","Berhasil Hapus Kelompok");
     }
 }

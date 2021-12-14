@@ -14,7 +14,9 @@ class ProdukController extends Controller
      */
     public function index()
     {
-        return view("pages.produk.list");
+        return view("pages.produk.list",[
+            "produk" => Produk::all()
+        ]);
     }
 
     /**
@@ -35,7 +37,25 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "nama" => "required",
+            "kelompok_id" => "required",
+            "satuan" => "required",
+            "harga" => "required",
+            "user_id" => "required"
+        ]);
+
+        Produk::create([
+            "nama" => $request->nama,
+            "kelompok_id" => $request->kelompok_id,
+            "harga" => $request->harga,
+            "satuan" => $request->satuan,
+            "user_id" => $request->user_id
+        ]);
+
+        return redirect()
+            ->route("produk.index")
+            ->with("info","Berhasil Tambah Kelompok");
     }
 
     /**
@@ -46,7 +66,10 @@ class ProdukController extends Controller
      */
     public function show(Produk $produk)
     {
-        //
+        return view("pages.admin.produk.form",[
+            "produk" => $produk,
+            "kelompok" => \App\Models\kelompok::all()
+        ]);
     }
 
     /**
@@ -57,7 +80,9 @@ class ProdukController extends Controller
      */
     public function edit(Produk $produk)
     {
-        //
+        return view('pages.produk.form',[
+            "produk" => $produk
+        ]);
     }
 
     /**
@@ -69,7 +94,8 @@ class ProdukController extends Controller
      */
     public function update(Request $request, Produk $produk)
     {
-        //
+        $produk->update($request->except(["_token","_method"]));
+        return redirect()->route("produk.index");
     }
 
     /**
@@ -80,6 +106,10 @@ class ProdukController extends Controller
      */
     public function destroy(Produk $produk)
     {
-        //
+        $produk->delete();
+
+        return redirect()
+            ->route("produk.index")
+            ->with("info","Berhasil Hapus Kelompok");
     }
 }

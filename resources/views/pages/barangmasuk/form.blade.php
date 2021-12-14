@@ -4,7 +4,13 @@
 <div class="container">
     <h1>Form Barang Masuk</h1>
     <hr>
-    <form action="" method="post">
+    <form action="{{ isset($barangmasuk)
+        ?route("barangmasuk.update",$barangmasuk)
+        :route("barangmasuk.store") }}" method="post">
+         @csrf
+         @isset($barangmasuk)
+             @method("PUT")
+         @endisset
         <div class="mb-3">
             <label for="tanggal" class="form-label">Tanggal</label>
             <input type="date" class="form-control" name="tanggal">

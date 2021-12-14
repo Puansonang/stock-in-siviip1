@@ -4,7 +4,13 @@
 <div class="container">
     <h1>Form Produk</h1>
     <hr>
-    <form action="" method="post">
+    <form action="{{ isset($produk)
+        ?route("produk.update",$produk)
+        :route("produk.store") }}" method="post">
+        @csrf
+        @isset($produk)
+            @method("PUT")
+        @endisset
         <div class="mb-3">
             <label for="nama" class="form-label">Nama</label>
             <input type="text" class="form-control" name="nama">
